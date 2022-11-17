@@ -32,6 +32,7 @@ class OpenAIToolbar(QtWidgets.QToolBar):
         utils.logger.info('Button Pressed!')
         url = open_ai_helper.generate_image(self.entry_box.text())
         file = self.api.resources_dir / 'ai.png'
+        file = open_ai_helper.check_file_name(file)
         if file.is_file():
             file.unlink()
         if not url:

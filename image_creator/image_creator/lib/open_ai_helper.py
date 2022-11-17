@@ -78,6 +78,20 @@ def edit_image(image_file: Path, mask_image: Path, prompt: str, num_iterations: 
     return image_urls
 
 
+def check_file_name(file: Path) -> Path:
+    if file.is_file():
+        version = file.stem.split('_')[-1]
+        if version.isdigit():
+            new_version = str(int(version) + 1)
+            file = file.parent / \
+                (file.stem.replace(version, new_version) + file.suffix)
+        else:
+            new_stem = file.stem + '_1'
+            file = file.parent / (new_stem + file.suffix)
+        return check_file_name(file)
+    else:
+        return file
+
 # def main() -> None:
 
 #     key_file = Path(__file__).parent.parent / 'etc' / '.keys.txt'
