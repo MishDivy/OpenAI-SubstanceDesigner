@@ -91,22 +91,3 @@ def check_file_name(file: Path) -> Path:
         return check_file_name(file)
     else:
         return file
-
-# def main() -> None:
-
-#     key_file = Path(__file__).parent.parent / 'etc' / '.keys.txt'
-#     example_image = Path(r'D:\FunToys\OpenAI-SD\images\cat.png')
-#     empty_image = Path(r'D:\FunToys\OpenAI-SD\images\cat2.png')
-#     key = read_api_key(key_file)
-#     openai.api_key = key
-
-#     image_url = generate_image(
-#         'a munchkin cat with a pumpkin head')
-#     image_url.download_image(empty_image)
-#     # image_url = generate_variations(example_image, 1)
-#     # image_url[0].download_image(empty_image)
-
-
-# if __name__ == '__main__':
-#     url = generate_image('Orange british short hair cat with a pumpkin head')
-#     print(url)

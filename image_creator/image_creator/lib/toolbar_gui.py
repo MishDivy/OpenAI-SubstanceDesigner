@@ -16,17 +16,26 @@ class OpenAIToolbar(QtWidgets.QToolBar):
         self.setObjectName('OpenAI.Toolbar')
         self.api = api
 
+        # Generate Image from Prompt
         action = self.addAction(QtGui.QIcon(
             str(self.api.toolbar_ui_dir / 'play_button.png')), '')
         action.setToolTip(
             'Set the prompt for image generation.')
         action.triggered.connect(self.on_clicked)
 
+        # Generate Image from node
         variations_action = self.addAction(QtGui.QIcon(
             str(self.api.toolbar_ui_dir / 'variations_button.png')), '')
         variations_action.setToolTip(
             'Create variations of the selected node.')
         variations_action.triggered.connect(self.create_variations)
+
+        # Generate Image from mask and node
+        mask_action = self.addAction(QtGui.QIcon(
+            str(self.api.toolbar_ui_dir / 'mask_button.png')), '')
+        mask_action.setToolTip(
+            'Create variations using selected node with a mask node.')
+        mask_action.triggered.connect(self.create_variations_using_mask)
 
         self.entry_box = QtWidgets.QLineEdit()
         self.entry_box.setObjectName('prompt')
@@ -56,7 +65,7 @@ class OpenAIToolbar(QtWidgets.QToolBar):
 
     def on_clicked(self) -> None:
         utils.logger.info('Button Pressed!')
-        url = open_ai_helper.generate_image(self.entry_box.text())
+        url = open_ai_helper.generate_image(self.get_text_prompt())
         file = self.api.resources_dir / 'ai.png'
         file = open_ai_helper.check_file_name(file)
         if file.is_file():
@@ -65,6 +74,9 @@ class OpenAIToolbar(QtWidgets.QToolBar):
             return
         url.download_image(file)
         self.create_bitmap_from_file(file)
+
+    def get_text_prompt(self) -> str:
+        return self.entry_box.text()
 
     def create_file_browser(self) -> None:
         file_name = QtWidgets.QFileDialog.getOpenFileName(
@@ -90,3 +102,24 @@ class OpenAIToolbar(QtWidgets.QToolBar):
                 return
             urls[0].download_image(file)
             self.create_bitmap_from_file(file)
+
+    def create_variations_using_mask(self) -> None:
+        images = self.api.export_selected_nodes()
+        main_image = images[0]
+        mask = images[1]
+
+        for count, image in enumerate(images):
+            if count > 1:
+                break
+            utils.wait_for_substance_engine(
+                lambda image: image.is_file(), '', 'Cannot export the node to image.', image=image)
+
+        urls = open_ai_helper.edit_image(main_image, mask, self.get_text_prompt())
+        file = self.api.resources_dir / 'ai.png'
+        file = open_ai_helper.check_file_name(file)
+        if file.is_file():
+            file.unlink()
+        if not urls:
+            return
+        urls[0].download_image(file)
+        self.create_bitmap_from_file(file)

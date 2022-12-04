@@ -66,10 +66,17 @@ class API:
                 node.setPropertyValue(
                     prop, sd.api.sdvaluestring.SDValueString.sNew(value))
 
+    def set_RGBA_on_output_node(self, node) -> None:
+        for prop in node.getProperties(sd.api.sdproperty.SDPropertyCategory.Annotation):
+            if prop.getLabel() == 'Format':
+                node.setPropertyValue(
+                    prop, sd.api.sdvalueint.SDValueInt.sNew(1))
+
     def create_output_node(self, node=None):
         self.refresh_active_graph()
         out_node = self.graph.newNode('sbs::compositing::output')
         self.__temp_out_nodes.append(out_node)
+        self.set_RGBA_on_output_node(out_node)
         self.set_identifier(out_node, self.check_unique_output_node_name())
         if node is not None:
             out_prop = None
@@ -106,4 +113,10 @@ class API:
             self.create_output_node(node)
         self.export_outputs()
         files = self.get_last_exported_images(len(nodes))
+        self.clean_output_nodes()
         return files
+
+    def clean_output_nodes(self) -> None:
+        for node in self.__temp_out_nodes:
+            self.graph.deleteNode(node)
+        self.__temp_out_nodes.clear()
