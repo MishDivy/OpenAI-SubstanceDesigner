@@ -8,7 +8,7 @@ importlib.reload(utils)
 
 UI_DIR = Path(__file__).parent.parent / 'ui'
 ETC_DIR = Path(__file__).parent.parent / 'etc'
-RESOURCES_DIR = Path(r'D:\FunToys\OpenAI-SD\images')
+RESOURCES_DIR = Path(__file__).parent.parent / 'images'
 
 
 class API:

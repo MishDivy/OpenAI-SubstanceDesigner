@@ -1,0 +1,9 @@
+{
+    "metadata_format_version": "1",
+    "name": "Image Creator",
+    "version": "1.0",
+    "author": "Divyansh Mishra",
+    "email": "devmishra718@gmail.com",
+    "min_designer_version": "10.1.1",
+    "platform": "any"
+}
