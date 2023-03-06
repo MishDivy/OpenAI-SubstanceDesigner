@@ -10,10 +10,14 @@ Users can create images from text prompts, get variations for any node in substa
 
 - Substance Designer 10.1.1 or above
 - OpenAI DALL-E2 API Key
+- Python Packages
+  - [openai](https://pypi.org/project/openai/)
+  - sd (This should be installed if you use Substance Designer Python Environment. On default, it is loacted here:
+        `"C:\Program Files\Adobe\Adobe Substance 3D Designer\plugins\pythonsdk\python.exe"`)
 
 ## Installation
 
-1) Download the assignment-final folder from this repo.
+1) Clone or Download the repo.
 2) Open Substance Designer.
 3) Open Plugin Manager from Tools > Plugin Manager.
 4) Click on Install Button and select the *image_creator.sdplugin*.
